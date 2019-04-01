@@ -26,8 +26,14 @@ namespace TelerikTest02
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connStr = Configuration.GetConnectionString("DefaultConnection");
+            if (connStr.Contains("%CONTENTROOTPATH%"))
+            {
+                string currDir = Environment.CurrentDirectory;
+                connStr = connStr.Replace("%CONTENTROOTPATH%", currDir);
+            }
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(connStr));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

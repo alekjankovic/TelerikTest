@@ -1,0 +1,113 @@
+﻿<div id="add-product" >
+</div>
+<span id="add-product-btn"  class="k-button hide-on-narrow">Add Product</span>
+
+<script type="text/x-kendo-template" id="add-product-template">
+
+    <div id="add-form">
+        <div class="demo-section k-content">
+            <label for="Name">Name:</label>
+            <input id="Name" style="width: 100%;" />
+        </div>
+
+        <div class="demo-section k-content">
+            <label for="ValidFrom">Valid From:</label>
+            <input id="ValidFrom" style="width: 100%;" />
+        </div>
+
+        <div class="demo-section k-content">
+            <label for="Quantity">Quantity:</label>
+            <input id="Quantity" style="width: 100%;" />
+        </div>
+
+        <div class="demo-section k-content">
+            <label for="Price">Price:</label>
+            <input id="Price" style="width: 100%;" />
+        </div>
+
+        <div class="demo-section k-content">
+            <label for="Category">Category:</label>
+            <select id="CategoryId" style="width: 100%;">
+            </select>
+        </div>
+    </div>
+    
+</script>
+
+<script>
+    $(document).ready(function () {
+        let dialog = $('#add-product');
+        let  addBtn = $("#add-product-btn");
+
+        addBtn.click(function () {
+            dialog.data("kendoDialog").open();
+
+            let apiurl = '/api/getcategories';
+            let apiType = 'GET';
+
+            $.ajax({
+                type: apiType,
+                url: apiurl,
+                dataType: 'json',
+                success: function (response) {
+                    $('#add-product').find('#CategoryId').html(function () {
+                        let h = "";
+                        $.each(response, function (index, value) {
+                            h += "<option value='" + value.id + "' >" + value.name + "</option>";
+                        });
+                        return h;
+                    });
+                },
+                error: function (data) {
+                    alert(data);
+                }
+            });
+        });
+
+        function onClose() {
+        }
+
+        dialog.kendoDialog({
+            width: "450px",
+            visible: false,
+            title: "Add Product",
+            closable: true,
+            modal: true,
+            content: kendo.template($("#add-product-template").text()),
+            //content: "<p>A new version of <strong>Kendo UI</strong> is available. Would you like to download and install it now?<p>",
+            actions: [
+                { text: 'Cancel' },
+                {
+                    text: 'Save',
+                    primary: true,
+                    action: function(e) {
+                        debugger;
+                        var formel = e.sender.element.find('#add-form');
+                        let apiurl = '/api/addnewproduct';
+                        let apiType = 'POST';
+                        let dataToSend = {
+                            Name: formel.find('#Name').val(),
+                            ValidFrom: formel.find('#ValidFrom').val(),
+                            Quantity: formel.find('#Quantity').val(),
+                            Price: formel.find('#Price').val(),
+                            CategoryId: formel.find('#CategoryId').val()
+                        };
+
+                        $.ajax({
+                            data: dataToSend,
+                            type: apiType,
+                            url: apiurl
+                        }).done(function (response) {
+                            debugger;
+                        });
+
+                        return false;
+
+
+                    }
+                }
+            ],
+            close: onClose
+        });
+    });
+</script>

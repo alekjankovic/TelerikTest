@@ -1,0 +1,83 @@
+﻿<div id="add-category" >
+</div>
+<span id="add-category-btn"  class="k-button hide-on-narrow">Add Category</span>
+
+<script type="text/x-kendo-template" id="add-category-template">
+
+    <div id="add-form">
+
+        <div class="demo-section k-content">
+            <label for="Name">Name:</label>
+            <input id="Name" style="width: 100%;" />
+        </div>
+
+        <div id="category-message">
+            
+
+        </div>
+    </div>
+    
+
+</script>
+
+
+
+<script>
+    $(document).ready(function () {
+        var dialog = $('#add-category'),
+            addBtn = $("#add-category-btn");
+
+        addBtn.click(function () {
+            dialog.data("kendoDialog").open();
+        });
+
+        function onClose() {
+        }
+
+        dialog.kendoDialog({
+            width: "450px",
+            visible: false,
+            title: "Add Category",
+            closable: true,
+            modal: true,
+            content: kendo.template($("#add-category-template").text()),
+            //content: "<p>A new version of <strong>Kendo UI</strong> is available. Would you like to download and install it now?<p>",
+            actions: [
+                { text: 'Cancel' },
+                {
+                    text: 'Save',
+                    primary: true,
+                    action: function (e) {
+                        e.sender.element.find('#category-message').text("Please wait...");
+                        var formel = e.sender.element.find('#add-form');
+                        let apiurl = '/api/addnewcategory';
+                        let apiType = 'POST';
+                        let dataToSend = {
+                            Name: formel.find('#Name').val(),
+                        };
+
+                        (function (dialog) {
+                            $.ajax({
+                                data: dataToSend,
+                                type: apiType,
+                                url: apiurl
+                            }).done(function (data) {
+                                debugger;
+                                dialog.sender.element.find('#category-message').text("Category Added.");
+
+                                let tempDialog = $("#add-category").data("kendoDialog");
+                                setTimeout(function () {
+                                    dialog.sender.element.find('#category-message').text("");
+                                    tempDialog.close();
+                                }, 1000);
+                            })
+                        })(e);
+
+                        return false;
+                    }
+                }
+            ],
+            close: onClose
+        });
+    });
+</script>

@@ -5,6 +5,24 @@
     <UserSecretsId>aspnet-TelerikTest02-20215C5E-0AFC-43A2-A0E3-E93CA871B221</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Data\CategoriesDb.cs" />
+    <Compile Remove="Models\ApplicationDbContext.cs" />
+    <Compile Remove="Models\AspNetRoleClaims.cs" />
+    <Compile Remove="Models\AspNetRoles.cs" />
+    <Compile Remove="Models\AspNetUserClaims.cs" />
+    <Compile Remove="Models\AspNetUserLogins.cs" />
+    <Compile Remove="Models\AspNetUserRoles.cs" />
+    <Compile Remove="Models\AspNetUsers.cs" />
+    <Compile Remove="Models\AspNetUserTokens.cs" />
+    <Compile Remove="Models\ManageViewModels\ApplicationUser.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Home\About.cshtml" />
+    <Content Remove="Views\Home\Contact.cshtml" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.9" />
@@ -16,6 +34,19 @@
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.3" />
     <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.2" />
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DataBase\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Views\Home\_AddCategory.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Home\_AddProduct.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
   </ItemGroup>
 
 </Project>
